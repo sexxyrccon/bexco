@@ -95,23 +95,23 @@ class MyThread(QThread):
     def calculate_angle(self, shoulder, elbow, wrist):
         # 각도 계산 (삼각법 사용)
         shoulder = [shoulder.x, shoulder.y]
-        elbow = [elbow.x, elbow.y]
         wrist = [wrist.x, wrist.y]
         
-        vector1 = [shoulder[0] - elbow[0], shoulder[1] - elbow[1]]
-        vector2 = [wrist[0] - elbow[0], wrist[1] - elbow[1]]
+        vector1 = [shoulder[0] - wrist[0], shoulder[1] - wrist[1]]
         
-        angle_radians = math.atan2(vector2[1], vector2[0]) - math.atan2(vector1[1], vector1[0])
+        angle_radians = math.atan2(vector1[1], vector1[0])
         angle_degrees = math.degrees(angle_radians)
         if angle_degrees < 0:
             angle_degrees += 360
-        return angle_degrees
+        return int(angle_degrees)
 
     def send_angle_to_arduino(self, left_angle, right_angle):
         # 각도를 시리얼로 전송
         if self.serial_port:
-            message = f"L:{left_angle:.2f},R:{right_angle:.2f}\n"
+            message = str(left_angle * 1000 + right_angle).zfill(6) + '\n'  # 개행 문자 추가
             self.serial_port.write(message.encode())
+            print(f"Sent: {message.strip()}")  # 디버깅 용으로 출력
+
 
     def cvimage_to_label(self, image):
         # 창 크기에 맞춰 이미지 크기 조정
