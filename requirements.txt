@@ -1,0 +1,5 @@
+PyQt5
+mediapipe
+opencv-python
+imutils
+pyserial
