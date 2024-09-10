@@ -1,4 +1,5 @@
 #include <Servo.h>
+#include <stdlib.h>
 
 Servo servo1;
 Servo servo2;
@@ -39,7 +40,7 @@ void loop() {
           left_angle = left_angle - 90;
         }
         else {
-          left_angle = 180;
+          left_angle = 80;
         }
 
         if (right_angle < 90) {
@@ -57,7 +58,7 @@ void loop() {
 
         // 각도를 서보 모터로 전달
         servo1.write(left_angle);
-        servo2.write(180 - right_angle);
+        servo2.write(abs(180 - right_angle));
 
         // 디버깅을 위한 출력
         Serial.println("Received: " + input_data);
